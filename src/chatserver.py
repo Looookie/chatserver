@@ -1,9 +1,9 @@
 import json
 
-import logging
 import uuid
 import redis
 import threading
+import logger
 
 from gevent.pywsgi import WSGIServer
 from geventwebsocket.handler import WebSocketHandler
@@ -58,6 +58,7 @@ class Chat(WebSocketApplication):
         data = json.loads(message)
         data['user'] = self.userid.hex
         publish(data)
+        logger.debug('receive:%s from %s' % (data['message'], data['user']))
 
     def on_broadcast(self, data):
         self.ws.send(json.dumps(data))
